@@ -66,7 +66,7 @@ Retorne SOMENTE JSON válido com este formato:
       throw new Error("A IA não retornou conteúdo.");
     }
 
-    const clean = raw.replace(/^\`\`\`json\\s*/, "").replace(/\\s*\`\`\`$/, "");
+    const clean = raw.trim().replace(/^\`\`\`json\s*/i, "").replace(/\s*\`\`\`$/, "");
     const result = JSON.parse(clean);
 
     return Response.json({
