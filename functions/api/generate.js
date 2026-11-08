@@ -9,31 +9,24 @@ export async function onRequestPost({ request, env }) {
 
     const input = await request.json();
     const topic = String(input.topic || "").trim().slice(0, 1200);
-
     if (!topic) {
       return Response.json({ error: "Informe o tema do vídeo." }, { status: 400 });
     }
 
     const shortsAuto = input.duration_mode === "shorts-auto";
-    const duration = shortsAuto ? null : 600;
-    const format = ["16:9", "9:16", "1:1"].includes(input.format)
-      ? input.format
-      : "16:9";
+    const format = ["16:9", "9:16", "1:1"].includes(input.format) ? input.format : "16:9";
+    const prompt = `Crie um roteiro audiovisual em português brasileiro sobre: ${topic}.
+Formato: ${format}. Duração: ${shortsAuto ? "30 a 180 segundos; escolha o tempo adequado e informe duration_seconds" : "600 segundos (10 minutos)"}.
+Personagem fixo em todas as cenas: homem pardo adulto, cabelo tigela arredondado, camiseta laranja lisa e calça jeans azul. Não altere sua aparência.
+Crie ${shortsAuto ? "3 ou 4" : "5 ou 6"} cenas concisas, com cenários e objetos variados. Cada cena deve ter título, visual, ação, câmera, narração curta e props.
+Crie SEO coerente com o roteiro: título YouTube atraente sem clickbait, descrição natural com palavras-chave e hashtags no final, 10 a 15 tags, palavra-chave principal e até 5 secundárias. Em Shorts, chapters deve ser [].
+Retorne somente JSON válido neste formato:
+{"title":"...","synopsis":"...","main_character":"...","audio_direction":"...","duration_seconds":90,"scenes":[{"title":"...","visual":"...","action":"...","camera":"...","narration":"...","props":["..."]}],"seo":{"youtube_title":"...","description":"...","tags":["..."],"hashtags":["#..."],"primary_keyword":"...","secondary_keywords":["..."],"chapters":[{"time":"00:00","title":"..."}]}}
+Não inclua markdown nem texto fora do JSON.`;
 
-    const prompt = `Crie um plano original de produção audiovisual em português brasileiro.
-Tema: ${topic}.
-Duração: ${shortsAuto ? "Escolha automaticamente o tempo necessário para contar a história, entre 30 e 180 segundos" : "EXATAMENTE 600 segundos (10 minutos)"}.
-Formato: ${format}.
-Personagem principal obrigatório e consistente: homem pardo adulto, cabelo tigela arredondado, camiseta laranja lisa e calça jeans azul.
-Não mude rosto, cabelo, roupa ou proporções entre cenas.
-Crie entre 3 e 8 cenas com cenários, iluminação e objetos específicos diferentes e coerentes com a história.
-Não repita o mesmo cenário nem o mesmo conjunto de objetos.
-Inclua narração curta em português brasileiro, ações visualmente filmáveis e instruções de câmera. O SEO deve corresponder exatamente ao conteúdo criado. Para Shorts, não crie capítulos; para vídeos horizontais de 10 minutos, crie capítulos estimados coerentes com a sequência das cenas.
-Retorne SOMENTE JSON válido com este formato:
-{"title":"...","synopsis":"...","main_character":"...","audio_direction":"...","scenes":[{"title":"...","visual":"...","action":"...","camera":"...","narration":"...","props":["..."]}]}`;
-
+    // Flash-Lite is selected for lower latency and smaller outputs, reducing timeout risk.
     const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent",
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash-lite:generateContent",
       {
         method: "POST",
         headers: {
@@ -43,7 +36,8 @@ Retorne SOMENTE JSON válido com este formato:
         body: JSON.stringify({
           contents: [{ parts: [{ text: prompt }] }],
           generationConfig: {
-            temperature: 0.9,
+            temperature: 0.7,
+            maxOutputTokens: 4096,
             responseMimeType: "application/json"
           }
         })
@@ -51,28 +45,30 @@ Retorne SOMENTE JSON válido com este formato:
     );
 
     const payload = await response.json();
-
     if (!response.ok) {
+      const message = payload.error?.message || "Erro na API Gemini.";
       return Response.json(
-        { error: payload.error?.message || "Erro na API Gemini." },
-        { status: 502 }
+        { error: message, source: "gemini", status: response.status },
+        { status: response.status === 429 ? 429 : 502 }
       );
     }
 
     const raw = payload.candidates?.[0]?.content?.parts
       ?.map((part) => part.text || "")
       .join("");
-
     if (!raw) {
-      throw new Error("A IA não retornou conteúdo.");
+      throw new Error("A IA não retornou conteúdo. Tente novamente.");
     }
 
-    const clean = raw.trim().replace(/^\`\`\`json\s*/i, "").replace(/\s*\`\`\`$/, "");
+    const clean = raw.trim().replace(/^```json\s*/i, "").replace(/\s*```$/, "");
     const result = JSON.parse(clean);
+    if (!Array.isArray(result.scenes) || !result.scenes.length) {
+      throw new Error("A IA retornou um roteiro sem cenas. Tente novamente.");
+    }
 
     return Response.json({
       ...result,
-      duration: shortsAuto ? (Number(result.duration_seconds) || 90) : 600,
+      duration: shortsAuto ? Math.min(180, Math.max(30, Number(result.duration_seconds) || 90)) : 600,
       duration_mode: shortsAuto ? "shorts-auto" : "fixed",
       format,
       generated_at: new Date().toISOString()
