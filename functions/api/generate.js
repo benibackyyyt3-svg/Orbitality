@@ -32,7 +32,7 @@ Retorne SOMENTE JSON válido com este formato:
 {"title":"...","synopsis":"...","main_character":"...","audio_direction":"...","scenes":[{"title":"...","visual":"...","action":"...","camera":"...","narration":"...","props":["..."]}]}`;
 
     const response = await fetch(
-      "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent",
+      "https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent",
       {
         method: "POST",
         headers: {
