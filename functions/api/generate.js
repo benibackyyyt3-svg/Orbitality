@@ -22,7 +22,7 @@ export async function onRequestPost({ request, env }) {
 
     const prompt = `Crie um plano original de produção audiovisual em português brasileiro.
 Tema: ${topic}.
-Duração: ${duration} segundos.
+Duração: ${shortsAuto ? "Escolha automaticamente o tempo necessário para contar a história, entre 30 e 180 segundos" : "EXATAMENTE 600 segundos (10 minutos)"}.
 Formato: ${format}.
 Personagem principal obrigatório e consistente: homem pardo adulto, cabelo tigela arredondado, camiseta laranja lisa e calça jeans azul.
 Não mude rosto, cabelo, roupa ou proporções entre cenas.
