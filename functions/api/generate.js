@@ -28,7 +28,7 @@ Personagem principal obrigatório e consistente: homem pardo adulto, cabelo tige
 Não mude rosto, cabelo, roupa ou proporções entre cenas.
 Crie entre 3 e 8 cenas com cenários, iluminação e objetos específicos diferentes e coerentes com a história.
 Não repita o mesmo cenário nem o mesmo conjunto de objetos.
-Inclua narração curta em português brasileiro, ações visualmente filmáveis e instruções de câmera.
+Inclua narração curta em português brasileiro, ações visualmente filmáveis e instruções de câmera. O SEO deve corresponder exatamente ao conteúdo criado. Para Shorts, não crie capítulos; para vídeos horizontais de 10 minutos, crie capítulos estimados coerentes com a sequência das cenas.
 Retorne SOMENTE JSON válido com este formato:
 {"title":"...","synopsis":"...","main_character":"...","audio_direction":"...","scenes":[{"title":"...","visual":"...","action":"...","camera":"...","narration":"...","props":["..."]}]}`;
 
