@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+  <meta name="theme-color" content="#111318">
+  <meta name="description" content="Sua fábrica de histórias e vídeos com IA.">
+  <link rel="manifest" href="/manifest.webmanifest">
+  <link rel="stylesheet" href="/styles.css">
+  <title>Video Factory AI</title>
+</head>
+<body>
+  <main class="shell">
+    <header class="top">
+      <div class="mark">VF</div>
+      <div><p class="eyebrow">ESTÚDIO CRIATIVO</p><h1>Video Factory <span>AI</span></h1></div>
+      <span class="status"><i></i> Pronto</span>
+    </header>
+    <section class="hero">
+      <p class="eyebrow">SUA IDEIA VIRA UMA HISTÓRIA</p>
+      <h2>O que vamos criar hoje?</h2>
+      <p class="muted">Descreva um tema. A IA prepara roteiro, personagens, cenas, objetos e narração.</p>
+      <label for="topic">Tema do vídeo</label>
+      <textarea id="topic" rows="4" maxlength="1200" placeholder="Ex.: Um homem de camiseta laranja encontra uma cidade escondida no meio da floresta..."></textarea>
+      <div class="two">
+        <div><label for="duration">Duração desejada</label><select id="duration"><option value="30">30 segundos</option><option value="60">1 minuto</option><option value="90">1 minuto e 30</option><option value="180">3 minutos</option></select></div>
+        <div><label for="format">Formato</label><select id="format"><option value="16:9">Horizontal 16:9</option><option value="9:16">Vertical 9:16</option><option value="1:1">Quadrado 1:1</option></select></div>
+      </div>
+      <button id="generate" class="primary">✦ GERAR PROJETO</button>
+      <p class="hint">Gera um plano completo de produção. A exportação de vídeo MP4 será adicionada na próxima etapa.</p>
+    </section>
+    <section id="progress" class="progress hidden" aria-live="polite"><div class="spinner"></div><span>Construindo sua história...</span></section>
+    <section id="result" class="result hidden">
+      <div class="result-head"><div><p class="eyebrow">SEU PROJETO</p><h2 id="result-title">Projeto criado</h2></div><button id="download" class="secondary">Baixar roteiro JSON</button></div>
+      <div id="result-body"></div>
+    </section>
+    <footer><span>VIDEO FACTORY AI</span><span>Feito para Android • Protótipo gratuito</span></footer>
+  </main>
+  <script src="/app.js" defer></script>
+</body>
+</html>
