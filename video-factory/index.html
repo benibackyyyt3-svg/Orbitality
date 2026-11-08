@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Video Factory AI</title>
+<style>
+:root { --bg:#0f1115; --card:#181b22; --tx:#f2f4f8; --mu:#9aa3b2; --ac:#ffd60a; --bd:#2a2f3a; }
+* { box-sizing: border-box; }
+body { margin:0; background:var(--bg); color:var(--tx); font:16px/1.45 system-ui,sans-serif; }
+main { max-width:640px; margin:0 auto; padding:20px 16px 48px; }
+h1 { font-size:1.5rem; margin:8px 0 4px; } p.sub { color:var(--mu); margin:0 0 18px; }
+.card { background:var(--card); border:1px solid var(--bd); border-radius:16px; padding:16px; }
+label { display:block; font-weight:600; margin:14px 0 6px; }
+textarea,select { width:100%; background:#0f1115; color:var(--tx); border:1px solid var(--bd); border-radius:10px; padding:12px; font:inherit; }
+textarea { min-height:84px; resize:vertical; }
+.row { display:grid; grid-template-columns:1fr 1fr; gap:12px; } @media (max-width:420px){ .row{grid-template-columns:1fr} }
+button.principal { width:100%; margin-top:18px; padding:16px; border:0; border-radius:12px; background:var(--ac); color:#111; font:800 1.05rem system-ui; cursor:pointer; }
+button.principal:disabled { opacity:.5; }
+button.sec { background:none; border:1px solid var(--bd); color:var(--tx); border-radius:10px; padding:10px 14px; margin-top:10px; }
+.trilho { height:12px; border-radius:99px; background:#0f1115; overflow:hidden; border:1px solid var(--bd); }
+#barra { height:100%; width:0; background:var(--ac); transition:width .2s; }
+#erro { background:#4a1d1d; border:1px solid #8a3a3a; color:#ffd6d6; padding:12px; border-radius:10px; margin-top:14px; }
+video { width:100%; max-height:70vh; background:#000; border-radius:12px; margin-top:8px; }
+a.baixar { display:block; text-align:center; margin-top:12px; padding:14px; border-radius:12px; background:#2e7d32; color:#fff; font-weight:700; text-decoration:none; }
+.pequeno { color:var(--mu); font-size:.85rem; }
+</style>
+</head>
+<body>
+<main>
+  <h1>Video Factory AI</h1>
+  <p class="sub">Escreva o assunto, aperte o botão e receba um vídeo 3D narrado, com legendas, pronto para baixar.</p>
+  <div class="card">
+    <label for="tema">Sobre o que será o vídeo?</label>
+    <textarea id="tema" maxlength="300" placeholder="Ex.: Como o asfalto é feito"></textarea>
+    <div class="row">
+      <div><label for="duracao">Duração</label>
+        <select id="duracao"><option value="30">30 segundos</option><option value="45" selected>45 segundos</option><option value="60">1 minuto</option><option value="90">1 min 30 s</option></select></div>
+      <div><label for="formato">Formato</label>
+        <select id="formato"><option value="vertical">Vertical 9:16 (Shorts/Reels)</option><option value="horizontal">Horizontal 16:9</option></select></div>
+    </div>
+    <div class="row">
+      <div><label for="voz">Voz</label>
+        <select id="voz"><option value="pm_alex">Alex (masculina)</option><option value="pm_santa">Santa (masculina)</option><option value="pf_dora">Dora (feminina)</option></select></div>
+      <div><label for="musica">Música de fundo <span id="musicaVal" class="pequeno">12%</span></label>
+        <input id="musica" type="range" min="0" max="40" value="12" style="width:100%"></div>
+    </div>
+    <button id="gerar" class="principal">GERAR VÍDEO</button>
+    <button id="cancelar" class="sec" hidden>Cancelar</button>
+    <div id="erro" hidden></div>
+  </div>
+  <div id="prog" class="card" style="margin-top:14px" hidden>
+    <div style="display:flex;justify-content:space-between"><span id="etapa">…</span><b id="pct">0%</b></div>
+    <div class="trilho" style="margin-top:8px"><div id="barra"></div></div>
+    <p class="pequeno">Mantenha esta aba aberta e a tela ligada até terminar. O vídeo é criado no seu aparelho.</p>
+  </div>
+  <div id="resultado" class="card" style="margin-top:14px" hidden>
+    <b>Seu vídeo está pronto</b>
+    <video id="video" controls playsinline></video>
+    <p id="info" class="pequeno"></p>
+    <a id="baixar" class="baixar">Baixar MP4</a>
+  </div>
+</main>
+<script src="config.js"></script>
+<script type="module" src="app.js"></script>
+</body>
+</html>
