@@ -14,7 +14,8 @@ export async function onRequestPost({ request, env }) {
       return Response.json({ error: "Informe o tema do vídeo." }, { status: 400 });
     }
 
-    const duration = Math.max(15, Math.min(180, Number(input.duration) || 30));
+    const shortsAuto = input.duration_mode === "shorts-auto";
+    const duration = shortsAuto ? null : 600;
     const format = ["16:9", "9:16", "1:1"].includes(input.format)
       ? input.format
       : "16:9";
@@ -71,7 +72,8 @@ Retorne SOMENTE JSON válido com este formato:
 
     return Response.json({
       ...result,
-      duration,
+      duration: shortsAuto ? (Number(result.duration_seconds) || 90) : 600,
+      duration_mode: shortsAuto ? "shorts-auto" : "fixed",
       format,
       generated_at: new Date().toISOString()
     });
