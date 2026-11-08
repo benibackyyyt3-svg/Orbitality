@@ -52,7 +52,7 @@ async function exportWebM(){
   btn.disabled=false;btn.textContent="Exportar novamente";
   const seo=latest.seo||{},tags=(seo.tags||[]).join(", "),hashtags=(seo.hashtags||[]).join(" ");
   const metadata={title:seo.youtube_title||latest.title,description:seo.description||"",tags:seo.tags||[],hashtags:seo.hashtags||[],format:latest.format};
-  const zip=zipStore([{name:base+"/video.webm",data:new Uint8Array([])},{name:base+"/descricao-youtube.txt",data:new TextEncoder().encode((seo.youtube_title||latest.title)+"\n\n"+(seo.description||"")+"\n\n"+hashtags)},{name:base+"/tags-youtube.txt",data:new TextEncoder().encode(tags)},{name:base+"/seo-metadata.json",data:new TextEncoder().encode(JSON.stringify(metadata,null,2))},{name:base+"/roteiro.json",data:new TextEncoder().encode(JSON.stringify(latest,null,2))}]);
+  const zip=zipStore([{name:base+"/descricao-youtube.txt",data:new TextEncoder().encode((seo.youtube_title||latest.title)+"\n\n"+(seo.description||"")+"\n\n"+hashtags)},{name:base+"/tags-youtube.txt",data:new TextEncoder().encode(tags)},{name:base+"/seo-metadata.json",data:new TextEncoder().encode(JSON.stringify(metadata,null,2))},{name:base+"/roteiro.json",data:new TextEncoder().encode(JSON.stringify(latest,null,2))}]);
   // O ZIP contém os arquivos de SEO; o vídeo WebM é baixado separadamente acima.
   let zipLink=document.querySelector("#seo-zip-link");
   if(!zipLink){zipLink=document.createElement("a");zipLink.id="seo-zip-link";zipLink.className="secondary";zipLink.style.display="inline-block";zipLink.style.marginTop="10px";zipLink.style.padding="12px";zipLink.style.borderRadius="10px";zipLink.style.textDecoration="none";direct.insertAdjacentElement("afterend",zipLink)}
