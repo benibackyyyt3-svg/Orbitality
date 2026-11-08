@@ -1,0 +1,6 @@
+kokoro-onnx
+soundfile
+numpy
+fastapi
+uvicorn
+gradio==4.44.1
