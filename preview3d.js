@@ -16,7 +16,7 @@ function limb(parent, radiusTop, radiusBottom, length, color, pos){
   mesh.position.set(...pos); mesh.castShadow=true; parent.add(mesh); return mesh;
 }
 function init(){
-  if(!canvas || !window.THREE_PREVIEW_READY===false) return;
+  if(!canvas) return;
   renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:true});
   renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));
   renderer.shadowMap.enabled=true; renderer.shadowMap.type=THREE.PCFSoftShadowMap;
