@@ -30,12 +30,13 @@
       <p class="hint">Gera o roteiro e exporta uma versão animada em WebM com cartões de cena. Deixe a página aberta durante a exportação.</p>
     </section>
     <section id="progress" class="progress hidden" aria-live="polite"><div class="spinner"></div><span>Construindo sua história...</span></section>
+    <section id="preview3d" class="preview3d hidden"><div class="preview3d-head"><div><p class="eyebrow">CENA EM 3D</p><h2>Personagem principal</h2></div><span class="preview3d-badge">Prévia 3D ao vivo</span></div><canvas id="character-canvas" aria-label="Prévia 3D do personagem de camiseta laranja"></canvas><p class="hint">O personagem 3D mantém a aparência definida no roteiro. Esta é uma prévia interativa; a exportação atual continua em cartões animados.</p></section>
     <section id="result" class="result hidden">
       <div class="result-head"><div><p class="eyebrow">SEU PROJETO</p><h2 id="result-title">Projeto criado</h2></div><div class="export-actions"><button id="download" class="secondary">Baixar roteiro JSON</button><button id="export-webm" class="primary">Exportar vídeo WebM</button></div></div>
       <div id="result-body"></div>
     </section>
     <footer><span>VIDEO FACTORY AI</span><span>Feito para Android • Protótipo gratuito</span></footer>
   </main>
-  <script src="/app.js" defer></script>
+  <script src="/app.js" defer></script><script type="module" src="/preview3d.js"></script>
 </body>
 </html>
